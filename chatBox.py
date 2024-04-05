@@ -4,7 +4,19 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
+#imports for connecting to server 
+import socket 
+import threading 
+
 class ChatApp(App):
+    def __init__(self, **kwargs):
+        # give subclass same parameter signature as parent 
+        super().__init__(**kwargs)
+        # connect to the server setting set in file chat-server
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect(('localhost', 1077))
+        #threading.Thread(target=self.receive_messages).start()
+
     def build(self):
         layout = BoxLayout(orientation='vertical')
 
@@ -31,7 +43,8 @@ class ChatApp(App):
     #function to reflect typed messages use for testing
     def on_button_click(self, instance):
         message = self.text_input.text
-        self.message_label.text = f"USER A: {message}"
+        #send message to server
+        self.client_socket.send(message.encode('utf-8'))
      # clear input box 
         self.text_input.text = '' 
 
