@@ -1,36 +1,40 @@
-# imports
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 
-#base
 class ChatApp(App):
     def build(self):
-        # layout for chat 
-        chatLayout = BoxLayout(orientation='vertical')
+        layout = BoxLayout(orientation='vertical')
 
-        # Message block 
-        self.messages_label = Label(text="Chat Application by Stephanie and Yulia")
-        chatLayout.add_widget(self.messages_label)
+        # name of our prog
+        title_label = Label(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50)
+        layout.add_widget(title_label)
 
-        # text block
-        self.text_input = TextInput(hint_text="Start typing")
-        chatLayout.add_widget(self.text_input)
-
+        # view messages
+        self.message_label = Label(text="", size_hint_y=None, height=50)
+        layout.add_widget(self.message_label)
+        
+        # space to type
+        self.text_input = TextInput(hint_text='Type here', multiline=False)
+        layout.add_widget(self.text_input)
+        
         # send button
-        send_button = Button(text="Send")
-        send_button.bind(on_press=self.send_message)
-        chatLayout.add_widget(send_button)
+        button = Button(text='Send')
+        #connect to function
+        button.bind(on_press=self.on_button_click)
+        layout.add_widget(button)
 
-        return chatLayout
+        return layout
 
-    #refelect message 
-    def send_message(self, instance):
+    #function to reflect typed messages use for testing
+    def on_button_click(self, instance):
         message = self.text_input.text
-        self.messages_label.text += f"\n{message}"
-        self.text_input.text = ""
+        self.message_label.text = f"USER A: {message}"
+     # clear input box 
+        self.text_input.text = '' 
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     ChatApp().run()

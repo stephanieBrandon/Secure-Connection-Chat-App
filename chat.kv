@@ -1,0 +1,23 @@
+<ChatApp>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: "Stephanies and Yulia's chat app"
+            size_hint_y: None
+            height: 50
+
+        Label:
+            id: message_label
+            text: ''
+            size_hint_y: None
+            height: 50
+
+        TextInput:
+            id: text_input
+            hint_text: 'Type here'
+            multiline: False
+
+        Button:
+            text: 'Send'
+            on_press: root.on_button_click(self)
