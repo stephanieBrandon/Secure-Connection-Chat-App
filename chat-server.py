@@ -27,15 +27,16 @@ def recieve_message(client_socket):
         return {'header': message_header, 'data': client_socket.recv(message_length)}
     except:
         return False
-
-while True:
+    while True:
+        
+""""while True:
     read_sockets, _, exception_sockets = select.select(
         sockets_list, [], sockets_list)
     for notified_socket in read_sockets:
         if notified_socket == server_socket:
             client_socket, client_address = server_socket.accept()
             user = recieve_message(client_socket)
-
+"""
 #handle client connections
 #def handle_client(client_socket, address):
     #print(f"Connection from {address}")
