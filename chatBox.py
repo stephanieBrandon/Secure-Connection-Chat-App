@@ -26,6 +26,8 @@ class ChatApp(App):
         _, received_message = message.split(":", 1)
         self.update_message(received_message.strip())  # Update the chat label
 """
+    def recieved_data(self, instance):
+            self.incoming_msg_label.text = self.client_socket.recv(1024).decode()
 
     def build(self):
         layout = BoxLayout(orientation='vertical')
@@ -35,8 +37,10 @@ class ChatApp(App):
         layout.add_widget(title_label)
 
         # view messages
-        self.message_label = Label(text="should appear here", size_hint_y=None, height=50)
-        layout.add_widget(self.message_label)
+        self.incoming_msg_label = Label(text="incoming msg should appear here", size_hint_y=None, height=50)
+        layout.add_widget(self.incoming_msg_label)
+
+
         #Label to display incoming messages 
         class MyLabel(Label):
             def __init__(self, **kwargs):
@@ -47,7 +51,8 @@ class ChatApp(App):
 
                 def get_data(self):
                     while True:
-                        self.text = self.sock.get_data()
+                     recieved_msg = 'test'
+                     recieved_msg = self.text = self.sock.get_data()
         
         # space to type
         self.text_input = TextInput(hint_text='Type here', multiline=False)
@@ -57,6 +62,7 @@ class ChatApp(App):
         button = Button(text='Send')
         #connect to function
         button.bind(on_press=self.on_button_click)
+        button.bind(on_release=self.recieved_data)
         layout.add_widget(button)
 
         return layout

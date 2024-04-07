@@ -1,3 +1,4 @@
+#:kivy 2.3.0
 <ChatApp>:
     BoxLayout:
         orientation: 'vertical'
@@ -8,8 +9,13 @@
             height: 50
 
         Label:
-            id: message_label
-            text: ''
+            id: incoming_msg_label
+            text: 'incoming_msg_label'
+            size_hint_y: None
+            height: 50
+        Label:
+            id: recieved_msg
+            text: 'Test'
             size_hint_y: None
             height: 50
 

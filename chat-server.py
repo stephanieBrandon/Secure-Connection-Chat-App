@@ -1,5 +1,6 @@
 #figure out how to change the data from only displaying in terminal to having that data passed through client.py class MySocket
-
+import kivy
+print(kivy.__version__)
 #objective create a reliable connection for chat application using TCP
 import socket
 import threading
