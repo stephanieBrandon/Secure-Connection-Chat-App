@@ -1,6 +1,11 @@
+#figure out how to change the data from only displaying in terminal to having that data passed through client.py class MySocket
+
 #objective create a reliable connection for chat application using TCP
 import socket
-import threading 
+import threading
+"""from chatBox import handle_received_message
+import sys
+print(sys.path)"""
 
 host = 'localhost' #refers to the loopback interface of the local machine 127.0.0.1 IE listens for connections only on this machine
 
@@ -18,6 +23,16 @@ def handle_client(client_socket, address):
         client_socket.send(data)
     client_socket.close()
     print(f"The connection from {address} has been closed.")
+
+"""def recieve_message(client_socket):
+    while True:
+        try:
+            data = client_socket.recv(1024)
+            if data:
+                handle_received_message(data.decode("utf-8"))
+        except ConnectionResetError:
+            print("Connection closed by server.")
+            break"""
 #Server config
 def main():
     host
@@ -36,9 +51,10 @@ def main():
     try:
         while True:
             client_socket, address = server_socket.accept()
-
+            #create a thread for each new connecting client.
             client_thread = threading.Thread(target=handle_client, args=(client_socket, address))
             client_thread.start()
+            """client_socket.send()"""
     except KeyboardInterrupt:
         print("Server is shutting down.")
         server_socket.close()
