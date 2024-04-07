@@ -26,6 +26,7 @@ class ChatApp(App):
         _, received_message = message.split(":", 1)
         self.update_message(received_message.strip())  # Update the chat label
 """
+    #- sb !important
     def recieved_data(self, instance):
             self.incoming_msg_label.text = self.client_socket.recv(1024).decode()
 
@@ -35,12 +36,12 @@ class ChatApp(App):
         # name of our prog
         title_label = Label(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50)
         layout.add_widget(title_label)
-
+        #- sb !important
         # view messages
         self.incoming_msg_label = Label(text="incoming msg should appear here", size_hint_y=None, height=50)
         layout.add_widget(self.incoming_msg_label)
 
-
+        #-sb probably removing ignore ( same with in client.py file)
         #Label to display incoming messages 
         class MyLabel(Label):
             def __init__(self, **kwargs):
@@ -62,6 +63,7 @@ class ChatApp(App):
         button = Button(text='Send')
         #connect to function
         button.bind(on_press=self.on_button_click)
+        #- sb !important
         button.bind(on_release=self.recieved_data)
         layout.add_widget(button)
 
