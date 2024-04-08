@@ -59,5 +59,6 @@ def main():
     except KeyboardInterrupt:
         print("Server is shutting down.")
         server_socket.close()
+        
 if __name__ == "__main__":
     main()
