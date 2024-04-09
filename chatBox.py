@@ -85,11 +85,18 @@ class ChatApp(MDApp):
         # clear input box 
         self.text_input.text = '' 
 
+    """
     #function to display who the message is from
+
+    -- function passing self, addess of the user, and the message we have 
+    def incoming_message(self, address, message):
+    
+    -- split incoming context 
+    ip , port = address.split(':')
+
+    -- display the messsage 
+    self.incoming_msg_label.text += f"FROM {port}: {message}\n"
     """
-    def message_received(self):
-        message = data.decode('utf-8')
-        self.message_label.text += f"USER B: {message}\n"
-    """
+
 if __name__ == '__main__':
     ChatApp().run()
