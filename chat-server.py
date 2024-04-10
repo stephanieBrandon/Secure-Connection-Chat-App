@@ -4,60 +4,53 @@ print(kivy.__version__)
 #objective create a reliable connection for chat application using TCP
 import socket
 import threading
-"""from chatBox import handle_received_message
-import sys
-print(sys.path)"""
 
-host = 'localhost' #refers to the loopback interface of the local machine 127.0.0.1 IE listens for connections only on this machine
-
-#handle client connections
-def handle_client(client_socket, address):
-    print(f"Connection from {address}")
-
-    while True:
-        data = client_socket.recv(1024)
-        if not data:
-            break
-
-        print(f"Recieved data from {address}: {data.decode('utf-8')}")
-
-        client_socket.send(data)
-    client_socket.close()
-    print(f"The connection from {address} has been closed.")
-
-"""def recieve_message(client_socket):
-    while True:
-        try:
-            data = client_socket.recv(1024)
-            if data:
-                handle_received_message(data.decode("utf-8"))
-        except ConnectionResetError:
-            print("Connection closed by server.")
-            break"""
-#Server config
-def main():
-    host
-    port = 1077
-
-    #TCP socket creation
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    #Binding the socket to the address and port
-    server_socket.bind((host, port))
-
-    #setting it to listen for up to 5 connections.
-    server_socket.listen(5)
-    print(f"Server is listening on {host} : {port}")
-
-    try:
+class ServerManager:
+    #method to set up the chat's server
+    def set_up_server(self):
+        host = '127.0.0.1'
+        port = 1077
+        #creating a IPv4, TCP socket
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #binding this socket to the designated host(IP) and port
+        self.server_socket.bind((host, port))
+        #when new client connects add it to our connected clients list
+        self.clients = []
+        #setting the maximum clients this server will accept to connect.
+        self.server_socket.listen(5)
+        print(f"Server is listening on host {host} and port {port}")
+        #a while loop to continually accept new connections 
         while True:
-            client_socket, address = server_socket.accept()
-            #create a thread for each new connecting client.
-            client_thread = threading.Thread(target=handle_client, args=(client_socket, address))
+            client_socket, address = self.server_socket.accept()
+            print(f"Connection from {address}")
+            #-sb need to get the username from the client after it connects here.
+            username = client_socket.recv(1024)
+            print(f'user: {username.decode()} is connected to the server.')
+            self.clients.append(client_socket)
+            #-sb now incorportating threads to handle the already connected clients
+            # msgs so that our while loop can keep accepting connection while our threads deal with the msgs.
+            client_thread = threading.Thread(target=self.handle_client, args=(client_socket, username.decode()))
             client_thread.start()
-            """client_socket.send()"""
-    except KeyboardInterrupt:
-        print("Server is shutting down.")
-        server_socket.close()
-if __name__ == "__main__":
-    main()
+    def handle_client(self, client_socket, username):
+        try:
+            # this method had a while loop that keeps listening to incoming msgs from the client_socket passed to it that is connected to a specific client
+            while True:
+                #if we get an empty msg we conclude that the client disconnected.
+                data = client_socket.recv(1024) # this recieve method is blocking. 
+                if not data:
+                    break
+                print(f"{username}: {data.decode()}")
+                for sock in self.clients:
+                    if sock == client_socket:
+                       continue 
+                    sock.send(f'\n{username}: \n   '.encode('utf-8') + data)
+        except ConnectionResetError:
+            pass
+        finally:
+            #close socket from the server side
+            client_socket.close()
+            print(f'{username}\'s socket is closed.')
+            self.clients.remove(client_socket)
+if __name__ == '__main__':
+    server_manager = ServerManager()
+    server_manager.set_up_server()
