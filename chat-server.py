@@ -29,7 +29,7 @@ class ServerManager:
             self.clients.append(client_socket)
             #-sb now incorportating threads to handle the already connected clients
             # msgs so that our while loop can keep accepting connection while our threads deal with the msgs.
-            client_thread = threading.Thread(target=self.handle_client, args=(client_socket,))
+            client_thread = threading.Thread(target=self.handle_client, args=(client_socket, username.decode()))
             client_thread.start()
     def handle_client(self, client_socket, username):
         try:
