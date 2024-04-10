@@ -32,11 +32,23 @@ class ChatApp(MDApp):
             self.incoming_msg_label.text = self.client_socket.recv(1024).decode()
 
     def build(self):
-        layout = MDBoxLayout(orientation='vertical')
+        layout = MDBoxLayout(orientation='vertical', padding=40, spacing=20) 
 
-        # name of our prog
-        title_label = MDLabel(text="Stephanies and Yulia's chat app", size_hint_y=None, height=20, halign="center", valign="middle" )
+        # Title
+        title_label = MDLabel(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50, halign="center", valign="middle" )
         layout.add_widget(title_label)
+
+        # User input section
+        username_label = MDLabel(text="Name:", size_hint=(None, None), size=(100, 50), halign="center", valign="middle")
+        layout.add_widget(username_label)
+
+        self.username_input = MDTextField(hint_text='type name here', size_hint=(None, None), size=(250, 100))
+        layout.add_widget(self.username_input)
+
+        # Button
+        connect_button = MDRaisedButton(text='Connect', size_hint=(None, None), size=(100, 50))
+        connect_button.bind(on_press=self.on_button_click)
+        layout.add_widget(connect_button)
 
         #- sb !important
         # view messages
