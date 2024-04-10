@@ -71,20 +71,20 @@ class ChatApp(MDApp):
         return layout
             # -sb -Tues
         # -??? self.client_socket.send('clientA'.encode('utf-8'))
-        def connect_to_server(self, instance):
-            #connect method to connect our client to the server.
-            self.client_socket.connect((self.host, self.port))
-            #where 'client' is we want the entry of what user put in as their user name
-            # - yulia replace name_text with kivy version
-            username = self.username_input.text
-            print(f'username: {username}')
-            self.client_socket.send(username.encode('utf-8'))
-            #self.name_label['state'] = "disable"
-            #self.username_input['state'] = "disable"
-            #self.connect_button['state'] = "disable"
-            msg_thread = threading.Thread(target=self.listen_to_server)
-            msg_thread.daemon = True # marked as Daemon so that it will close when the main thread closes.
-            msg_thread.start()
+    def connect_to_server(self, instance):
+        #connect method to connect our client to the server.
+        self.client_socket.connect((self.host, self.port))
+        #where 'client' is we want the entry of what user put in as their user name
+        # - yulia replace name_text with kivy version
+        username = self.username_input.text
+        print(f'username: {username}')
+        self.client_socket.send(username.encode('utf-8'))
+        #self.name_label['state'] = "disable"
+        #self.username_input['state'] = "disable"
+        #self.connect_button['state'] = "disable"
+        msg_thread = threading.Thread(target=self.listen_to_server)
+        msg_thread.daemon = True # marked as Daemon so that it will close when the main thread closes.
+        msg_thread.start()
     
     def listen_to_server(self):
         while (True):
