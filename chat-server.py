@@ -4,6 +4,7 @@ print(kivy.__version__)
 #objective create a reliable connection for chat application using TCP
 import socket
 import threading
+from kivy.clock import Clock
 
 class ServerManager:
     #method to set up the chat's server
@@ -40,9 +41,12 @@ class ServerManager:
                 if not data:
                     break
                 print(f"{username}: {data.decode()}")
+                #client_socket.send(f'\n{username}: \n   '.encode('utf-8') + data)
                 for sock in self.clients:
                     if sock == client_socket:
                        continue 
+                    # Schedule the message sending on the main thread
+                    Clock.schedule_once(lambda dt: self.send_message(sock, username, data.decode()), 0)
                     sock.send(f'\n{username}: \n   '.encode('utf-8') + data)
         except ConnectionResetError:
             pass
