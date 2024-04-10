@@ -46,8 +46,8 @@ class ServerManager:
                     if sock == client_socket:
                        continue 
                     # Schedule the message sending on the main thread
-                    Clock.schedule_once(lambda dt: self.send_message(sock, username, data.decode()), 0)
-                    sock.send(f'\n{username}: \n   '.encode('utf-8') + data)
+                    Clock.schedule_once(lambda dt: self.broadcast_message(sock, username, data.decode()), 0)
+                    sock.sendall(f'\n{username}: \n   '.encode('utf-8') + data)
         except ConnectionResetError:
             pass
         finally:
@@ -55,6 +55,12 @@ class ServerManager:
             client_socket.close()
             print(f'{username}\'s socket is closed.')
             self.clients.remove(client_socket)
+    def broadcast_message(self, sender_username, message, client_socket):
+        # Send the message to all connected clients except the sender
+        for sock in self.clients:
+            if sock != client_socket:
+                sock.sendall(f"\n{sender_username}:\n   {message}".encode("utf-8"))
+            
 if __name__ == '__main__':
     server_manager = ServerManager()
     server_manager.set_up_server()
