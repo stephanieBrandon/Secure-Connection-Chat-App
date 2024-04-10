@@ -28,7 +28,7 @@ class ChatApp(App):
         layout.add_widget(title_label)
         #- sb !important
         # view messages
-        self.incoming_msg_label = Label(text="incoming msg should appear here", size_hint_y=None, height=50)
+        self.incoming_msg_label = Label(text="", size_hint_y=None, height=50)
         layout.add_widget(self.incoming_msg_label)
         
 
@@ -90,18 +90,18 @@ class ChatApp(App):
         while (True):
             dataBytes = self.client_socket.recv(1024)
             #yulia replace with text box 
-            self.incoming_msg_label.text = dataBytes.decode()
+            self.text_input.text = dataBytes.decode()
 
     def send_to_server(self, instance):
         #send the message from client to the server.
         #yulia -substitute in kivy? -- shows users msgs in blue
        #self.main_textbox.tag_config("self_message", foreground="blue")
-        message = self.incoming_msg_label.text
+        message = self.text_input.text
         #encode to convert the string to array of bytes to send to the server
         self.client_socket.send(message.encode('utf-8'))
         #clearing the input box
         #self.text_input.text = ''
-        self.incoming_msg_label.text = f'\n{self.username_input.text}:\n   {message}' #, "self_message" add back if able to create blue in kivy
+        self.text_input.text = f'\n{self.username_input.text}:\n   {message}' #, "self_message" add back if able to create blue in kivy
 
     #function to reflect typed messages use for testing
    #def on_button_click(self, instance):
