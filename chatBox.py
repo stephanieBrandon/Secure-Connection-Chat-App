@@ -21,17 +21,12 @@ class ChatApp(MDApp):
         self.port = 1077
 
     def build(self):
-        layout = BoxLayout(orientation='vertical')
+        layout = MDBoxLayout(orientation='vertical', padding=40, spacing=20) 
 
         # name of our prog
-        title_label = MDLabel(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50)
+        title_label = MDLabel(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50,halign="center", valign="middle" )
         layout.add_widget(title_label)
-        #- sb !important
-        # view messages
-        self.incoming_msg_label = MDLabel(text="", size_hint_y=None, height=50)
-        layout.add_widget(self.incoming_msg_label)
-        
-
+     
         #-sb probably removing ignore ( same with in client.py file)
         #Label to display incoming messages 
         #class MyLabel(Label):
@@ -55,7 +50,12 @@ class ChatApp(MDApp):
         connect_button.bind(on_press=self.connect_to_server)
         layout.add_widget(connect_button)
 
-                # space to type
+        #- sb !important
+        # view messages
+        self.incoming_msg_label = MDLabel(text=" Waiting for message...", size_hint=(1, None), height=300, halign="center", valign="middle" )
+        layout.add_widget(self.incoming_msg_label)
+
+        # space to type
         self.text_input = MDTextField(hint_text='Type here', multiline=False)
         layout.add_widget(self.text_input)
         
@@ -89,8 +89,8 @@ class ChatApp(MDApp):
     def listen_to_server(self):
         while (True):
             dataBytes = self.client_socket.recv(1024)
-            #yulia replace with text box 
-            self.text_input.text = dataBytes.decode()
+            #adjust to reflect in the incoming box
+            self.incoming_msg_label.text = dataBytes.decode()
 
     def send_to_server(self, instance):
         #send the message from client to the server.
