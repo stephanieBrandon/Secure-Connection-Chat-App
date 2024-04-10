@@ -7,7 +7,6 @@ from kivy.uix.label import Label
 #imports for connecting to server 
 import socket 
 import threading
-from client import MySocket
 
 
 class ChatApp(App):
