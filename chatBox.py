@@ -1,15 +1,15 @@
-from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
+from kivymd.app import MDApp
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 
 #imports for connecting to server 
 import socket 
 import threading
 
 
-class ChatApp(App):
+class ChatApp(MDApp):
     def __init__(self, **kwargs):
         # give subclass same parameter signature as parent 
         super().__init__(**kwargs)
@@ -21,17 +21,12 @@ class ChatApp(App):
         self.port = 1077
 
     def build(self):
-        layout = BoxLayout(orientation='vertical')
+        layout = MDBoxLayout(orientation='vertical', padding=40, spacing=20) 
 
         # name of our prog
-        title_label = Label(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50)
+        title_label = MDLabel(text="Stephanies and Yulia's chat app", size_hint_y=None, height=50,halign="center", valign="middle" )
         layout.add_widget(title_label)
-        #- sb !important
-        # view messages
-        self.incoming_msg_label = Label(text="", size_hint_y=None, height=50)
-        layout.add_widget(self.incoming_msg_label)
-        
-
+     
         #-sb probably removing ignore ( same with in client.py file)
         #Label to display incoming messages 
         #class MyLabel(Label):
@@ -46,21 +41,26 @@ class ChatApp(App):
         #connect_button = Button(text='Connect')
         #connect_button.bind(on_press=self.connect_to_server)
         # User input section
-        username_label = Label(text="Name:", size_hint=(None, None), size=(100, 50), halign="center", valign="middle")
+        username_label = MDLabel(text="Name:", size_hint=(None, None), size=(100, 50), halign="center", valign="middle")
         layout.add_widget(username_label)
-        self.username_input = TextInput(hint_text='type name here', size_hint=(None, None), size=(250, 100))
+        self.username_input = MDTextField(hint_text='type name here', size_hint=(None, None), size=(250, 100))
         layout.add_widget(self.username_input)
         # user input Button
-        connect_button = Button(text='Connect', size_hint=(None, None), size=(100, 50))
+        connect_button = MDRaisedButton(text='Connect', size_hint=(None, None), size=(100, 50))
         connect_button.bind(on_press=self.connect_to_server)
         layout.add_widget(connect_button)
 
-                # space to type
-        self.text_input = TextInput(hint_text='Type here', multiline=False)
+        #- sb !important
+        # view messages
+        self.incoming_msg_label = MDLabel(text=" Waiting for message...", size_hint=(1, None), height=300, halign="center", valign="middle" )
+        layout.add_widget(self.incoming_msg_label)
+
+        # space to type
+        self.text_input = MDTextField(hint_text='Type here', multiline=False)
         layout.add_widget(self.text_input)
         
         # send button
-        button = Button(text='Send')
+        button = MDRaisedButton(text='Send')
         #connect to function
         #button.bind(on_press=self.on_button_click) #-sb remove?
         button.bind(on_press=self.send_to_server)
@@ -89,8 +89,8 @@ class ChatApp(App):
     def listen_to_server(self):
         while (True):
             dataBytes = self.client_socket.recv(1024)
-            #yulia replace with text box 
-            self.text_input.text = dataBytes.decode()
+            #adjust to reflect in the incoming box
+            self.incoming_msg_label.text = dataBytes.decode()
 
     def send_to_server(self, instance):
         #send the message from client to the server.
